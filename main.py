@@ -43,12 +43,6 @@ while not game_over:
             x_coordinate = event.pos[0]
             y_coordinate = event.pos[1]
             print ("CLICKED at (" + str(x_coordinate) + ", " + str(y_coordinate) + ") in grid")
-            if turn == 0:
-              pygame.draw.circle(window, WHITE, (x_coordinate,y_coordinate), 7)
-            else:
-                pygame.draw.circle(window,RED, (x_coordinate, y_coordinate), 7)
-            turn += 1
-            turn = turn % 2
 
             # Check if valid coordinate (if near the grid)
             validPosition = True
@@ -77,8 +71,14 @@ while not game_over:
                 gridArr[row][col] = 1;
                 print(gridArr)
                 # display piece
-
+                if turn == 0:
+                    pygame.draw.circle(window, WHITE, (x_coordinate,y_coordinate), 7)
+                else:
+                    pygame.draw.circle(window, RED, (x_coordinate,y_coordinate), 7)
                 # next turn
+                turn += 1
+                turn = turn % 2
+
 
 
         pygame.display.update()
