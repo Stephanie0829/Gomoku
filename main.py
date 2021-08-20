@@ -14,6 +14,7 @@ START_HEIGHT = 60
 START_WIDTH = 120
 BLOCK_SIZE = 25
 WHITE = (255,255,255)
+RED = (255,0,0)
 
 
 #initializing the window
@@ -23,6 +24,7 @@ window = pygame.display.set_mode(size)
 
 #Game variables
 game_over = False
+turn = 0
 
 # Create grids (Array and GUI)
 gridArr = np.zeros((15, 15))
@@ -41,6 +43,12 @@ while not game_over:
             x_coordinate = event.pos[0]
             y_coordinate = event.pos[1]
             print ("CLICKED at (" + str(x_coordinate) + ", " + str(y_coordinate) + ") in grid")
+            if turn == 0:
+              pygame.draw.circle(window, WHITE, (x_coordinate,y_coordinate), 7)
+            else:
+                pygame.draw.circle(window,RED, (x_coordinate, y_coordinate), 7)
+            turn += 1
+            turn = turn % 2
 
             # Check if valid coordinate (if near the grid)
             validPosition = True
@@ -63,6 +71,7 @@ while not game_over:
 
             print("CLICKED at (" + str(row) + ", " + str(col) + ") in array")
 
+
             # If array is empty, fill the array and display piece and move to next turn
             if validPosition and gridArr[row][col] == 0:
                 gridArr[row][col] = 1;
@@ -73,8 +82,3 @@ while not game_over:
 
 
         pygame.display.update()
-
-
-
-
-
