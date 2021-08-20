@@ -94,13 +94,13 @@ while not game_over:
 
                 # display piece
                 if turn == 0:
-                    pygame.draw.circle(window, WHITE, (x_coordinate, y_coordinate), 7)
+                    pygame.draw.circle(window, WHITE, (col*25+START_WIDTH,row*25+START_HEIGHT), 7)
                 else:
-                    pygame.draw.circle(window, RED, (x_coordinate, y_coordinate), 7)
+                    pygame.draw.circle(window, RED,(col*25+START_WIDTH,row*25+START_HEIGHT), 7)
 
                 # check if win
-                if isWin(gridArr, turn+1):
-                    print("WINNER " + str(turn))
+                if isWin(gridArr, turn):
+                    print("WINNER")
 
                 # next turn
                 turn += 1
