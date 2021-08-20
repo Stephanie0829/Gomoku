@@ -26,6 +26,28 @@ window = pygame.display.set_mode(size)
 game_over = False
 turn = 0
 
+
+def isWin(array, piece):
+    for row in range(15):
+        for col in range(15):
+            # check horizontal 5 in a row
+            if col < 11 and gridArr[row][col] == piece and gridArr[row][col + 1] == piece and gridArr[row][col + 2] == piece and gridArr[row][
+                col + 3] == piece and gridArr[row][col + 4] == piece:
+                return True
+            # check vertical 5 in a row
+            if row < 11 and gridArr[row][col] == piece and gridArr[row + 1][col] == piece and gridArr[row + 2][col] == piece and gridArr[row + 3][
+                col] == piece and gridArr[row + 4][col] == piece:
+                return True
+            # check diagonal pos slope 5 in a row
+            if (row > 3 and col < 11) and gridArr[row][col] == piece and gridArr[row - 1][col + 1] == piece and gridArr[row - 2][col + 2] == piece and gridArr[row - 3][
+                col + 3] == piece and gridArr[row - 4][col + 4] == piece:
+                return True
+            # check diagonal neg slope 5 in a row
+            if (row < 11 and col < 11) and gridArr[row][col] == piece and gridArr[row + 1][col + 1] == piece and gridArr[row + 2][col + 2] == piece and gridArr[row + 3][
+                col + 3] == piece and gridArr[row + 4][col + 4] == piece:
+                return True
+
+
 # Create grids (Array and GUI)
 gridArr = np.zeros((15, 15))
 print(gridArr)
@@ -65,20 +87,28 @@ while not game_over:
 
             print("CLICKED at (" + str(row) + ", " + str(col) + ") in array")
 
-
             # If array is empty, fill the array and display piece and move to next turn
             if validPosition and gridArr[row][col] == 0:
-                gridArr[row][col] = 1;
+                gridArr[row][col] = turn+1;
                 print(gridArr)
+
                 # display piece
                 if turn == 0:
-                    pygame.draw.circle(window, WHITE, (x_coordinate,y_coordinate), 7)
+                    pygame.draw.circle(window, WHITE, (x_coordinate, y_coordinate), 7)
                 else:
-                    pygame.draw.circle(window, RED, (x_coordinate,y_coordinate), 7)
+                    pygame.draw.circle(window, RED, (x_coordinate, y_coordinate), 7)
+
+                # check if win
+                if isWin(gridArr, turn):
+                    print("WINNER")
+
                 # next turn
                 turn += 1
                 turn = turn % 2
 
-
-
         pygame.display.update()
+
+
+
+
+
