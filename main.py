@@ -45,43 +45,53 @@ def isWin(array, piece):
             if (row < 11 and col < 11) and array[row][col] == piece and array[row + 1][col + 1] == piece and array[row + 2][col + 2] == piece and array[row + 3][
                 col + 3] == piece and array[row + 4][col + 4] == piece:
                 return True
+            
+def button(screen, position, text):
+    font = pygame.font.SysFont("comicsansms", 20)
+    text_render = font.render(text, 1, (0, 0, 0))
+    x, y, w , h = text_render.get_rect()
+    x, y = position
+    pygame.draw.line(screen, (255,255,255), (x, y), (x + w , y), 5)
+    pygame.draw.line(screen, (255,255,255), (x, y - 2), (x, y + h), 5)
+    pygame.draw.line(screen, (255,255,255), (x, y + h), (x + w , y + h), 5)
+    pygame.draw.line(screen, (255,255,255), (x + w , y+h), [x + w , y], 5)
+    pygame.draw.rect(screen, (255,255,255,0.8), (x, y, w , h))
+    return screen.blit(text_render, (x, y))
 
 
 # Human vs. human implementation
 def humanVsHuman():
-    # set screen
+        # set screen
     black = (0, 0, 0)
     window.fill(black)
 
     # Game variables
     game_over = False
     turn = 0
+    is_winner = 0
 
     # Create grids (Array and GUI)
     gridArr = np.zeros((15, 15))
     print(gridArr)
     for i in range(BOARD_HEIGHT):
         for j in range(BOARD_WIDTH):
-            pygame.draw.rect(window, WHITE,
-                             (i * BLOCK_SIZE + START_WIDTH, j * BLOCK_SIZE + START_HEIGHT, BLOCK_SIZE, BLOCK_SIZE), 1)
-
+            pygame.draw.rect(window, WHITE,(i * BLOCK_SIZE + START_WIDTH, j * BLOCK_SIZE + START_HEIGHT, BLOCK_SIZE, BLOCK_SIZE), 1)
+    #Running the game
     while not game_over:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-            # if event.type == pygame.MOUSEMOTION:
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            font = pygame.font.SysFont("comicsansms", 40)
+            if event.type == pygame.MOUSEBUTTONDOWN and is_winner == 0:
                 x_coordinate = event.pos[0]
                 y_coordinate = event.pos[1]
-                print("CLICKED at (" + str(x_coordinate) + ", " + str(y_coordinate) + ") in grid")
+                print ("CLICKED at (" + str(x_coordinate) + ", " + str(y_coordinate) + ") in grid")
 
                 # Check if valid coordinate (if near the grid)
                 validPosition = True
-                if x_coordinate > (BLOCK_SIZE / 2) + START_WIDTH + (
-                        BOARD_WIDTH * BLOCK_SIZE) or x_coordinate < START_WIDTH - (BLOCK_SIZE / 2):
+                if x_coordinate > (BLOCK_SIZE/2) + START_WIDTH + (BOARD_WIDTH*BLOCK_SIZE) or x_coordinate < START_WIDTH - (BLOCK_SIZE/2):
                     validPosition = False
-                if y_coordinate > (BLOCK_SIZE / 2) + START_HEIGHT + (
-                        BOARD_HEIGHT * BLOCK_SIZE) or y_coordinate < START_HEIGHT - (BLOCK_SIZE / 2):
+                if y_coordinate > (BLOCK_SIZE/2) + START_HEIGHT + (BOARD_HEIGHT*BLOCK_SIZE) or y_coordinate < START_HEIGHT - (BLOCK_SIZE/2):
                     validPosition = False
 
                 # round x-coordinate to closest intersection if difference between coordinates is small
@@ -100,26 +110,43 @@ def humanVsHuman():
 
                 # If array is empty, fill the array and display piece and move to next turn
                 if validPosition and gridArr[row][col] == 0:
-                    gridArr[row][col] = turn + 1;
+                    gridArr[row][col] = turn+1;
                     print(gridArr)
 
                     # display piece
                     if turn == 0:
-                        pygame.draw.circle(window, WHITE,
-                                           (col * BLOCK_SIZE + START_WIDTH, row * BLOCK_SIZE + START_HEIGHT), 7)
+                        text_render = font.render("Player 2's Turn", True, RED , (0,0,0))
+                        window.blit(text_render, (180, 2))
+                        pygame.draw.circle(window, WHITE, (col*25+START_WIDTH,row*25+START_HEIGHT), 7)
                     else:
-                        pygame.draw.circle(window, RED,
-                                           (col * BLOCK_SIZE + START_WIDTH, row * BLOCK_SIZE + START_HEIGHT), 7)
+                        text_render = font.render("Player 1's Turn ", True, WHITE,(0,0,0))
+                        window.blit(text_render, (180, 2))
+                        pygame.draw.circle(window, RED,(col*25+START_WIDTH,row*25+START_HEIGHT), 7)
 
                     # check if win
-                    if isWin(gridArr, turn + 1):
-                        print("WINNER " + str(turn))
-
+                    if isWin(gridArr, turn+1):
+                        print("WINNER is "+ str(turn))
+                        is_winner = 1
+                        #Displaying the winner
+                        player_turn = turn+1
+                        text_render = font.render("Player "+str(player_turn)+" Wins!   ", True, WHITE, (0, 0, 0))
+                        window.blit(text_render, (180, 2))
+                        break
                     # next turn
                     turn += 1
                     turn = turn % 2
 
-            pygame.display.update()
+            # Setting buttons for Quiting and Restarting
+            b1 = button(window, (200, 430), "Quit")
+            b2 = button(window, (300, 430), "Restart")
+
+            # Respond based on which button user has clicked
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if b1.collidepoint(pygame.mouse.get_pos()):
+                    game_over = True
+                elif b2.collidepoint(pygame.mouse.get_pos()):
+                    humanVsHuman()
+        pygame.display.update()
 
 
 def humanVsAI():
