@@ -155,7 +155,7 @@ def humanVsHuman():
                         player_turn = turn + 1
                         font = pygame.font.SysFont("Corbel", 45, True, True)
                         text_render = font.render("Player " + str(player_turn) + " Wins!   ", True, WHITE, (0, 0, 0))
-                        window.blit(text_render, (212, 10))
+                        window.blit(text_render, (208, 10))
                         break
                     # next turn
                     turn += 1
