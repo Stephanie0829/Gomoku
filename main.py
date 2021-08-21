@@ -151,7 +151,7 @@ def humanVsHuman():
             b1 = button(window, (200, 430), "Quit")
             b2 = button(window, (300, 430), "Restart")
             # Respond based on which button user has clicked
-            if turn == 0 and begin == 0:
+            if turn == 0 and begin == 0 and is_winner == 0:
                 text_render = font.render("Player 1's Turn ", True, WHITE, (0, 0, 0))
                 window.blit(text_render, (180, 2))
             if event.type == pygame.MOUSEBUTTONDOWN:
