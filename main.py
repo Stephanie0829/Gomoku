@@ -139,7 +139,7 @@ def humanVsHuman():
                         text_render = font.render("Player 1's Turn ", True, WHITE, (0, 0, 0))
                         window.blit(text_render, (180, 2))
                         img = pygame.image.load("Maroon-piece.png")
-                        img = pygame.transform.rotozoom(img,0,0.15)
+                        img = pygame.transform.rotozoom(img,0,0.18)
                         img.convert()
                         rect = img.get_rect()
                         rect.center = col * 25 + START_WIDTH, row * 25 + START_HEIGHT
