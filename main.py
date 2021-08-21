@@ -16,7 +16,7 @@ START_WIDTH = 120
 BLOCK_SIZE = 25
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
-MAROON = (78,27,39)
+MAROON = (168,140,148)
 # FONT = pygame.font.SysFont('Corbel',35)
 
 
