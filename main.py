@@ -147,8 +147,8 @@ def humanVsHuman():
                     turn += 1
                     turn = turn % 2
 
-            # Setting buttons for Quiting and Restarting
-            b1 = button(window, (200, 430), "Quit")
+            # Setting buttons for returing and restarting
+            b1 = button(window, (200, 430), "Home")
             b2 = button(window, (300, 430), "Restart")
             # Respond based on which button user has clicked
             if turn == 0 and begin == 0:
