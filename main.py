@@ -147,11 +147,11 @@ def humanVsHuman():
                     turn += 1
                     turn = turn % 2
 
-            # Setting buttons for returing and restarting
-            b1 = button(window, (200, 430), "Home")
+            # Setting buttons for Quiting and Restarting
+            b1 = button(window, (200, 430), "Quit")
             b2 = button(window, (300, 430), "Restart")
             # Respond based on which button user has clicked
-            if turn == 0 and begin == 0 and is_winner == 0:
+            if turn == 0 and begin == 0:
                 text_render = font.render("Player 1's Turn ", True, WHITE, (0, 0, 0))
                 window.blit(text_render, (180, 2))
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -165,11 +165,10 @@ def humanVsHuman():
 def humanVsAI():
     pass
 
-
 # create the menu
-FONT = pygame_menu.font.FONT_BEBAS
 menu = pygame_menu.Menu('Gomoku', WINDOW_WIDTH, WINDOW_HEIGHT, theme=pygame_menu.themes.THEME_DARK)
-menu.add.text_input('5 in a Row')
+menu.add.image('Gomoku-main.png', scale=(.5, .5))
+menu.add.label('\nSelect an option:', font_size=20)
 menu.add.button('Human vs. Human', humanVsHuman)
 menu.add.button('Human vs. AI', humanVsAI)
 menu.add.button('Quit', pygame_menu.events.EXIT)
