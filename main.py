@@ -128,11 +128,23 @@ def humanVsHuman():
                     if turn == 0:
                         text_render = font.render("Player 2's Turn", True, RED, (0, 0, 0))
                         window.blit(text_render, (180, 2))
-                        pygame.draw.circle(window, WHITE, (col * 25 + START_WIDTH, row * 25 + START_HEIGHT), 7)
+                        img = pygame.image.load("White-piece.png")
+                        img = pygame.transform.rotozoom(img,0,0.15)
+                        img.convert()
+                        rect = img.get_rect()
+                        rect.center = col * 25 + START_WIDTH, row * 25 + START_HEIGHT
+                        window.blit(img, rect)
+                        #pygame.draw.circle(window, WHITE, (col * 25 + START_WIDTH, row * 25 + START_HEIGHT), 7)
                     else:
                         text_render = font.render("Player 1's Turn ", True, WHITE, (0, 0, 0))
                         window.blit(text_render, (180, 2))
-                        pygame.draw.circle(window, RED, (col * 25 + START_WIDTH, row * 25 + START_HEIGHT), 7)
+                        img = pygame.image.load("Maroon-piece.png")
+                        img = pygame.transform.rotozoom(img,0,0.15)
+                        img.convert()
+                        rect = img.get_rect()
+                        rect.center = col * 25 + START_WIDTH, row * 25 + START_HEIGHT
+                        window.blit(img, rect)
+                        #pygame.draw.circle(window, RED, (col * 25 + START_WIDTH, row * 25 + START_HEIGHT), 7)
 
                     # check if win
                     if isWin(gridArr, turn + 1):
