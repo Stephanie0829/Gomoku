@@ -128,8 +128,9 @@ def humanVsAI():
 
 
 # create the menu
-menu = pygame_menu.Menu('Welcome', WINDOW_WIDTH, WINDOW_HEIGHT,theme=pygame_menu.themes.THEME_BLUE)
-menu.add.text_input('Gomoku')
+FONT = pygame_menu.font.FONT_BEBAS
+menu = pygame_menu.Menu('Gomoku', WINDOW_WIDTH, WINDOW_HEIGHT, theme=pygame_menu.themes.THEME_DARK)
+menu.add.text_input('5 in a Row')
 menu.add.button('Human vs. Human', humanVsHuman)
 menu.add.button('Human vs. AI', humanVsAI)
 menu.add.button('Quit', pygame_menu.events.EXIT)
