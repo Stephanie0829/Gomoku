@@ -12,7 +12,7 @@ BOARD_WIDTH = 14
 WINDOW_WIDTH = 640
 WINDOW_HEIGHT = 480
 START_HEIGHT = 60
-START_WIDTH = 120
+START_WIDTH = 145
 BLOCK_SIZE = 25
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
@@ -128,7 +128,7 @@ def humanVsHuman():
 
                     if turn == 0:
                         text_render = font.render("Player 2's Turn", True, MAROON, (0, 0, 0))
-                        window.blit(text_render, (180, 2))
+                        window.blit(text_render, (212, 10))
                         img = pygame.image.load("White-piece.png")
                         img = pygame.transform.rotozoom(img,0,0.15)
                         img.convert()
@@ -138,7 +138,7 @@ def humanVsHuman():
                         #pygame.draw.circle(window, WHITE, (col * 25 + START_WIDTH, row * 25 + START_HEIGHT), 7)
                     else:
                         text_render = font.render("Player 1's Turn ", True, WHITE, (0, 0, 0))
-                        window.blit(text_render, (180, 2))
+                        window.blit(text_render, (212, 10))
                         img = pygame.image.load("Maroon-piece.png")
                         img = pygame.transform.rotozoom(img,0,0.17)
                         img.convert()
@@ -153,20 +153,21 @@ def humanVsHuman():
                         is_winner = 1
                         # Displaying the winner
                         player_turn = turn + 1
+                        font = pygame.font.SysFont("Corbel", 45, True, True)
                         text_render = font.render("Player " + str(player_turn) + " Wins!   ", True, WHITE, (0, 0, 0))
-                        window.blit(text_render, (180, 2))
+                        window.blit(text_render, (212, 10))
                         break
                     # next turn
                     turn += 1
                     turn = turn % 2
 
             # Setting buttons for returning and restarting
-            b1 = button(window, (200, 430), "Home")
-            b2 = button(window, (300, 430), "Restart")
+            b1 = button(window, (245, 430), "Home")
+            b2 = button(window, (350,430), "Restart")
             # Respond based on which button user has clicked
             if turn == 0 and begin == 0 and is_winner == 0:
                 text_render = font.render("Player 1's Turn ", True, WHITE, (0, 0, 0))
-                window.blit(text_render, (180, 2))
+                window.blit(text_render, (212, 10))
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if b1.collidepoint(pygame.mouse.get_pos()):
                     game_over = True
