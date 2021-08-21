@@ -53,7 +53,7 @@ def isWin(array, piece):
 
 
 def button(screen, position, text):
-    font = pygame.font.SysFont("comicsansms", 20)
+    font = pygame.font.SysFont("Corbel", 20)
     text_render = font.render(text, 0, (0, 0, 0))
     x, y, w, h = text_render.get_rect()
     x, y = position
@@ -89,7 +89,7 @@ def humanVsHuman():
             begin = 0
             if event.type == pygame.QUIT:
                 sys.exit()
-            font = pygame.font.SysFont("comicsansms", 40)
+            font = pygame.font.SysFont("Corbel", 45)
             if event.type == pygame.MOUSEBUTTONDOWN and is_winner == 0:
                 begin = 1
                 x_coordinate = event.pos[0]
