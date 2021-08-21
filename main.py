@@ -16,6 +16,7 @@ START_WIDTH = 120
 BLOCK_SIZE = 25
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
+MAROON = (78,27,39)
 # FONT = pygame.font.SysFont('Corbel',35)
 
 
@@ -126,7 +127,7 @@ def humanVsHuman():
                     # display piece
 
                     if turn == 0:
-                        text_render = font.render("Player 2's Turn", True, RED, (0, 0, 0))
+                        text_render = font.render("Player 2's Turn", True, MAROON, (0, 0, 0))
                         window.blit(text_render, (180, 2))
                         img = pygame.image.load("White-piece.png")
                         img = pygame.transform.rotozoom(img,0,0.15)
