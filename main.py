@@ -335,9 +335,14 @@ def human_vs_ai():
                     human_vs_human()
 
         if turn == 1:
-            sleep(3)
-            row, col, algorithm_score = algorithm(grid_arr, 5, -math.inf, math.inf, True)
-            # next turn
+            sleep(1)
+            row, col, algorithm_score = algorithm(grid_arr, 1, -math.inf, math.inf, True)
+
+            # Change array
+            grid_arr[row][col] = turn + 1
+            print(grid_arr)
+
+            # Display piece
             print("AI turn")
             img = pygame.image.load("Maroon-piece.png")
             img = pygame.transform.rotozoom(img, 0, 0.17)
@@ -345,6 +350,7 @@ def human_vs_ai():
             rect = img.get_rect()
             rect.center = col * 25 + START_WIDTH, row * 25 + START_HEIGHT
             window.blit(img, rect)
+
             # change turns
             turn += 1
             turn = turn % 2
