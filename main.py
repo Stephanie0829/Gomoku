@@ -318,7 +318,7 @@ def human_vs_ai():
                     turn += 1
                     turn = turn % 2
                     text_render = font.render("     AI's Turn      ", True, MAROON, (0, 0, 0))
-                    window.blit(text_render, (212, 10))
+                    window.blit(text_render, (212, 12))
                     pygame.display.update()
 
             # Setting buttons for returning and restarting
