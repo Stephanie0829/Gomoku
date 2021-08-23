@@ -36,19 +36,19 @@ def count_horizontal(array, row, col, piece):
         no_piece += 1
     if array[row][col + 1] == piece:
         count += 1
-    elif array[row][col] == 0:
+    elif array[row][col + 1] == 0:
         no_piece += 1
     if array[row][col + 2] == piece:
         count += 1
-    elif array[row][col] == 0:
+    elif array[row][col + 2] == 0:
         no_piece += 1
     if array[row][col + 3] == piece:
         count += 1
-    elif array[row][col] == 0:
+    elif array[row][col + 3] == 0:
         no_piece += 1
     if array[row][col + 4] == piece:
         count += 1
-    elif array[row][col] == 0:
+    elif array[row][col + 4] == 0:
         no_piece += 1
     return count, no_piece
 
@@ -88,19 +88,19 @@ def count_slope_pos(array, row, col, piece):
         no_piece += 1
     if array[row - 1][col + 1] == piece:
         count += 1
-    elif array[row - 1][col] == 0:
+    elif array[row - 1][col + 1] == 0:
         no_piece += 1
     if array[row - 2][col + 2] == piece:
         count += 1
-    elif array[row - 2][col] == 0:
+    elif array[row - 2][col + 2] == 0:
         no_piece += 1
     if array[row - 3][col + 3] == piece:
         count += 1
-    elif array[row - 3][col] == 0:
+    elif array[row - 3][col + 3] == 0:
         no_piece += 1
     if array[row - 4][col + 4] == piece:
         count += 1
-    elif array[row - 4][col] == 0:
+    elif array[row - 4][col + 4] == 0:
         no_piece += 1
     return count, no_piece
 
@@ -175,11 +175,11 @@ def is_empty(array):
 def weights(count, no_piece, piece):
     points = 0
     count_enemy_piece = 5 - count - no_piece
+    # print("human: " + str(count_enemy_piece) + "ai: " + str(count) + "none: " + str(no_piece))
 
     # offense
     if count == 5:  # five in a row - win
-
-        points += 100
+        points += 1000
     elif count == 4 and no_piece == 1:  # 122220 or 022221
         points += 10
     elif count == 3 and no_piece == 2:  # 02220
@@ -189,13 +189,13 @@ def weights(count, no_piece, piece):
 
     # defense
     if count_enemy_piece == 5:  # five in a row - win
-        points -= 30
+        points -= 1000
     elif count_enemy_piece == 4 and no_piece == 1:  # 211110 or 011112
-        points -= 20
+        points -= 1000
     elif count_enemy_piece == 3 and no_piece == 2:  # 01110
-        points -= 4
+        points -= 800
     elif count_enemy_piece == 2 and no_piece == 3:  # 02220
-        points -= 1
+        points -= 10
 
     return points
 
@@ -208,35 +208,41 @@ def add_weights(array, piece):
     for row in range(15):
         for col in range(15):
             if array[row][col] == piece:
-                count += 14 - abs(7 - row) - abs(7 - col)
+                count += (14 - abs(7 - row) - abs(7 - col))/7
                 # print("count: " + str(count))
     points += count
 
     for row in range(15):
         for col in range(15):
+
+            no_piece = 0
             if col < 11:
                 count = count_horizontal(array, row, col, piece)[0]
                 no_piece = count_horizontal(array, row, col, piece)[1]
+                print("horizontal: " + str(count) + " " + str(no_piece) + " " + str(points))
                 points += weights(count, no_piece, 2)
 
             # check vertical 5 in a row
             if row < 11:
                 count = count_vertical(array, row, col, piece)[0]
                 no_piece = count_vertical(array, row, col, piece)[1]
+                print("vertical: " + str(count) + " " + str(no_piece) + " " + str(points))
                 points += weights(count, no_piece, 2)
 
             # check diagonal pos slope 5 in a row
             if row > 3 and col < 11:
                 count = count_slope_pos(array, row, col, piece)[0]
                 no_piece = count_slope_pos(array, row, col, piece)[1]
+                print("pos slope: " + str(count) + " " + str(no_piece) + " " + str(points))
                 points += weights(count, no_piece,2)
 
             # check diagonal neg slope 5 in a row
             if row < 11 and col < 11:
                 count = count_slope_neg(array, row, col, piece)[0]
                 no_piece = count_slope_neg(array, row, col, piece)[1]
-                points += weights(count, no_piece,2)
-
+                points += weights(count, no_piece, 2)
+                print("neg slope: " + str(count) + " " + str(no_piece) + " " + str(points))
+            print("points at (" + str(row) + ", " + str(col) + ") : " + str(points))
     return points
 
 
@@ -268,6 +274,7 @@ def algorithm(array, depth, alpha, beta, max_player):
                 value = new_value
                 row = rows[i]
                 column = cols[i]
+                print("Greater value at " + str(row) + " " + str(column) + "val: " + str(new_value))
                 # print("row and column" + str(row) + " " + str(column))
             alpha = max(alpha, value)
             if alpha >= beta:
