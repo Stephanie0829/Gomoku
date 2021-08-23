@@ -26,29 +26,125 @@ size = (WINDOW_WIDTH, WINDOW_HEIGHT)
 window = pygame.display.set_mode(size)
 
 
+# function to find if five in a row horizontal
+def count_horizontal(array, row, col, piece):
+    count = 0
+    no_piece = 0
+    if array[row][col] == piece:
+        count += 1
+    elif array[row][col] == 0:
+        no_piece += 1
+    if array[row][col + 1] == piece:
+        count += 1
+    elif array[row][col] == 0:
+        no_piece += 1
+    if array[row][col + 2] == piece:
+        count += 1
+    elif array[row][col] == 0:
+        no_piece += 1
+    if array[row][col + 3] == piece:
+        count += 1
+    elif array[row][col] == 0:
+        no_piece += 1
+    if array[row][col + 4] == piece:
+        count += 1
+    elif array[row][col] == 0:
+        no_piece += 1
+    return count, no_piece
+
+
+def count_vertical(array, row, col, piece):
+    count = 0
+    no_piece = 0
+    if array[row][col] == piece:
+        count += 1
+    elif array[row][col] == 0:
+        no_piece += 1
+    if array[row + 1][col] == piece:
+        count += 1
+    elif array[row + 1][col] == 0:
+        no_piece += 1
+    if array[row + 2][col] == piece:
+        count += 1
+    elif array[row + 2][col] == 0:
+        no_piece += 1
+    if array[row + 3][col] == piece:
+        count += 1
+    elif array[row + 3][col] == 0:
+        no_piece += 1
+    if array[row + 4][col] == piece:
+        count += 1
+    elif array[row + 4][col] == 0:
+        no_piece += 1
+    return count, no_piece
+
+
+def count_slope_pos(array, row, col, piece):
+    count = 0
+    no_piece = 0
+    if array[row][col] == piece:
+        count += 1
+    elif array[row][col] == 0:
+        no_piece += 1
+    if array[row - 1][col + 1] == piece:
+        count += 1
+    elif array[row - 1][col] == 0:
+        no_piece += 1
+    if array[row - 2][col + 2] == piece:
+        count += 1
+    elif array[row - 2][col] == 0:
+        no_piece += 1
+    if array[row - 3][col + 3] == piece:
+        count += 1
+    elif array[row - 3][col] == 0:
+        no_piece += 1
+    if array[row - 4][col + 4] == piece:
+        count += 1
+    elif array[row - 4][col] == 0:
+        no_piece += 1
+    return count, no_piece
+
+def count_slope_neg(array,row,col,piece):
+    count = 0
+    no_piece = 0
+    if array[row][col] == piece:
+        count += 1
+    elif array[row][col] == 0:
+        no_piece += 1
+    if array[row + 1][col + 1] == piece:
+        count += 1
+    elif array[row + 1][col + 1] == 0:
+        no_piece += 1
+    if array[row + 2][col + 2] == piece:
+        count += 1
+    elif array[row + 2][col + 2] == 0:
+        no_piece += 1
+    if array[row + 3][col + 3] == piece:
+        count += 1
+    elif array[row + 3][col + 3] == 0:
+        no_piece += 1
+    if array[row + 4][col + 4] == piece:
+        count += 1
+    elif array[row + 4][col + 4] == 0:
+        no_piece += 1
+    return count, no_piece
+
+
 # function to determine if a piece had won
 def is_win(array, piece):
     for row in range(15):
         for col in range(15):
             # check horizontal 5 in a row
-            if col < 11 and array[row][col] == piece and array[row][col + 1] == piece and array[row][
-                col + 2] == piece \
-                    and array[row][col + 3] == piece and array[row][col + 4] == piece:
+            if col < 11 and count_horizontal(array, row, col, piece)[0] == 5:
                 return True
             # check vertical 5 in a row
-            if row < 11 and array[row][col] == piece and array[row + 1][col] == piece and array[row + 2][
-                col] == piece and array[row + 3][
-                col] == piece and array[row + 4][col] == piece:
+            if row < 11 and count_vertical(array, row, col, piece)[0] == 5:
                 return True
             # check diagonal pos slope 5 in a row
-            if (row > 3 and col < 11) and array[row][col] == piece and array[row - 1][col + 1] == piece and \
-                    array[row - 2][col + 2] == piece and array[row - 3][
-                col + 3] == piece and array[row - 4][col + 4] == piece:
+            if (row > 3 and col < 11) and count_slope_pos(array, row, col, piece)[0] == 5:
                 return True
             # check diagonal neg slope 5 in a row
-            if (row < 11 and col < 11) and array[row][col] == piece and array[row + 1][col + 1] == piece and \
-                    array[row + 2][col + 2] == piece and array[row + 3][
-                col + 3] == piece and array[row + 4][col + 4] == piece:
+            if (row < 11 and col < 11) and count_slope_neg(array, row, col, piece)[0] == 5:
                 return True
 
 
@@ -65,60 +161,133 @@ def button(screen, position, text):
     return screen.blit(text_render, (x, y))
 
 
-def get_valid_locations(array):
+def is_empty(array):
     cols = []
     rows = []
-    for row in range(14):
-        for col in range(14):
+    for row in range(15):
+        for col in range(15):
             if array[row][col] == 0:
                 rows.append(row)
                 cols.append(col)
-    return rows,cols
+    return rows, cols
 
-def score_position(array, piece):
-    return 1
+
+def weights(count, no_piece, piece):
+    points = 0
+    count_enemy_piece = 5 - count - no_piece
+
+    # offense
+    if count == 5:  # five in a row - win
+
+        points += 100
+    elif count == 4 and no_piece == 1:  # 122220 or 022221
+        points += 10
+    elif count == 3 and no_piece == 2:  # 02220
+        points += 5
+    elif count == 2 and no_piece == 3:  # 02220
+        points += 2
+
+    # defense
+    if count_enemy_piece == 5:  # five in a row - win
+        points -= 30
+    elif count_enemy_piece == 4 and no_piece == 1:  # 211110 or 011112
+        points -= 20
+    elif count_enemy_piece == 3 and no_piece == 2:  # 01110
+        points -= 4
+    elif count_enemy_piece == 2 and no_piece == 3:  # 02220
+        points -= 1
+
+    return points
+
+
+def add_weights(array, piece):
+    points = 0
+
+    # score center column
+    count = 0
+    for row in range(15):
+        for col in range(15):
+            if array[row][col] == piece:
+                count += 14 - abs(7 - row) - abs(7 - col)
+                # print("count: " + str(count))
+    points += count
+
+    for row in range(15):
+        for col in range(15):
+            if col < 11:
+                count = count_horizontal(array, row, col, piece)[0]
+                no_piece = count_horizontal(array, row, col, piece)[1]
+                points += weights(count, no_piece, 2)
+
+            # check vertical 5 in a row
+            if row < 11:
+                count = count_vertical(array, row, col, piece)[0]
+                no_piece = count_vertical(array, row, col, piece)[1]
+                points += weights(count, no_piece, 2)
+
+            # check diagonal pos slope 5 in a row
+            if row > 3 and col < 11:
+                count = count_slope_pos(array, row, col, piece)[0]
+                no_piece = count_slope_pos(array, row, col, piece)[1]
+                points += weights(count, no_piece,2)
+
+            # check diagonal neg slope 5 in a row
+            if row < 11 and col < 11:
+                count = count_slope_neg(array, row, col, piece)[0]
+                no_piece = count_slope_neg(array, row, col, piece)[1]
+                points += weights(count, no_piece,2)
+
+    return points
 
 
 def algorithm(array, depth, alpha, beta, max_player):
     # return random.randint(0, 14), random.randint(0, 14), 4
     # get valid locations
-    rows, cols = get_valid_locations(array)
+    rows, cols = is_empty(array)
     # base cases
     if depth == 0:  # Finished recursion
-        return None, None, score_position(array, 2)
+        return None, None, add_weights(array, 2)
     if is_win(array, 1):  # Player win
         return None, None, -10000000000
     if is_win(array, 2):  # AI win
         return None, None, 1000000000000
-    if len(get_valid_locations(array)) == 0:  # Grid is completely filled
+    if len(is_empty(array)) == 0:  # Grid is completely filled
         return None, None, 0
 
     if max_player:
         value = -math.inf
-        row = rows[random.choice(rows)]
-        column = cols[random.choice(cols)]
+        index = random.randint(0, len(rows) - 1)
+        row = rows[index]
+        column = cols[index]
         for i in range(len(rows)):
             arr_copy = array.copy()
-            new_score = algorithm(arr_copy, depth - 1, alpha, beta, False)[2]
-            if new_score > value:
-                value = new_score
+            arr_copy[rows[i]][cols[i]] = 2
+            new_value = algorithm(arr_copy, depth - 1, alpha, beta, False)[2]
+            # print("new_value maxplayer: " + str(new_value))
+            if new_value > value:
+                value = new_value
                 row = rows[i]
                 column = cols[i]
+                # print("row and column" + str(row) + " " + str(column))
             alpha = max(alpha, value)
             if alpha >= beta:
                 break
         return row, column, value
     else:
         value = math.inf
-        row = rows[random.choice(rows)]
-        column = cols[random.choice(cols)]
+        index = random.randint(0, len(rows) - 1)
+        row = rows[index]
+        column = cols[index]
         for i in range(len(rows)):
             arr_copy = array.copy()
-            new_score = algorithm(arr_copy, depth - 1, alpha, beta, True)[2]
-            if new_score < value:
-                value = new_score
+            arr_copy[rows[i]][cols[i]] = 1
+            new_value = algorithm(arr_copy, depth - 1, alpha, beta, True)[2]
+            # print("new_value minplayer: " + str(new_value))
+            if new_value < value:
+                value = new_value
                 row = rows[i]
                 column = cols[i]
+                # print("row and column" + str(row) + " " + str(column))
             beta = min(beta, value)
             if alpha >= beta:
                 break
@@ -181,7 +350,7 @@ def human_vs_human():
 
                 # If array is empty, fill the array and display piece and move to next turn
                 if valid_position and grid_arr[row][col] == 0:
-                    grid_arr[row][col] = turn + 1;
+                    grid_arr[row][col] = turn + 1
                     print(grid_arr)
 
                     # display piece
@@ -309,16 +478,19 @@ def human_vs_ai():
                     if is_win(grid_arr, turn + 1):
                         print("WINNER is " + str(turn))
                         is_winner = 1
-                        # Displaying the winner
-                        player_turn = turn + 1
-                        text_render = font.render("Player " + str(player_turn) + " Wins!   ", True, WHITE, (0, 0, 0))
-                        window.blit(text_render, (208, 10))
+                        if turn == 0:
+                            text_render = font.render("Player 1 Wins!   ", True, WHITE, (0, 0, 0))
+                            window.blit(text_render, (208, 10))
+                        else:
+                            text_render = font.render("   AI Wins!   ", True, WHITE, (0, 0, 0))
+                            window.blit(text_render, (208, 10))
 
                     # change turns
-                    turn += 1
-                    turn = turn % 2
-                    text_render = font.render("     AI's Turn      ", True, MAROON, (0, 0, 0))
-                    window.blit(text_render, (212, 12))
+                    if is_winner == 0:
+                        turn += 1
+                        turn = turn % 2
+                        text_render = font.render("     AI's Turn      ", True, MAROON, (0, 0, 0))
+                        window.blit(text_render, (212, 12))
                     pygame.display.update()
 
             # Setting buttons for returning and restarting
@@ -332,15 +504,25 @@ def human_vs_ai():
                 if b1.collidepoint(pygame.mouse.get_pos()):
                     game_over = True
                 elif b2.collidepoint(pygame.mouse.get_pos()):
-                    human_vs_human()
+                    human_vs_ai()
 
-        if turn == 1:
-            sleep(1)
+        if turn == 1 and is_winner == 0:
+            # sleep(1)
             row, col, algorithm_score = algorithm(grid_arr, 1, -math.inf, math.inf, True)
-
+            print("score: " + str(algorithm_score))
             # Change array
             grid_arr[row][col] = turn + 1
-            print(grid_arr)
+            # print(grid_arr)
+
+            if is_win(grid_arr, turn + 1):
+                print("WINNER is " + str(turn))
+                is_winner = 1
+                if turn == 0:
+                    text_render = font.render("Player 1 Wins!   ", True, WHITE, (0, 0, 0))
+                    window.blit(text_render, (208, 10))
+                else:
+                    text_render = font.render("   AI Wins!   ", True, WHITE, (0, 0, 0))
+                    window.blit(text_render, (208, 10))
 
             # Display piece
             print("AI turn")
@@ -348,7 +530,7 @@ def human_vs_ai():
             img = pygame.transform.rotozoom(img, 0, 0.17)
             img.convert()
             rect = img.get_rect()
-            rect.center = col * 25 + START_WIDTH, row * 25 + START_HEIGHT
+            rect.center = int(col) * 25 + START_WIDTH, int(row) * 25 + START_HEIGHT
             window.blit(img, rect)
 
             # change turns
