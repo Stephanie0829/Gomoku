@@ -191,11 +191,11 @@ def weights(count, no_piece, piece):
     if count_enemy_piece == 5:  # five in a row - win
         points -= 1000
     elif count_enemy_piece == 4 and no_piece == 1:  # 211110 or 011112
-        points -= 1000
+        points -= 100
     elif count_enemy_piece == 3 and no_piece == 2:  # 01110
-        points -= 800
+        points -= 6
     elif count_enemy_piece == 2 and no_piece == 3:  # 02220
-        points -= 10
+        points -= 4
 
     return points
 
