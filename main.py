@@ -53,6 +53,7 @@ def count_horizontal(array, row, col, piece):
     return count, no_piece
 
 
+# function to find if five in a row vertical
 def count_vertical(array, row, col, piece):
     count = 0
     no_piece = 0
@@ -79,6 +80,7 @@ def count_vertical(array, row, col, piece):
     return count, no_piece
 
 
+# function to find if five in a row at a positive diagonal
 def count_slope_pos(array, row, col, piece):
     count = 0
     no_piece = 0
@@ -104,7 +106,9 @@ def count_slope_pos(array, row, col, piece):
         no_piece += 1
     return count, no_piece
 
-def count_slope_neg(array,row,col,piece):
+
+# function to find if five in a row at a negative diagonal
+def count_slope_neg(array, row, col, piece):
     count = 0
     no_piece = 0
     if array[row][col] == piece:
@@ -148,6 +152,7 @@ def is_win(array, piece):
                 return True
 
 
+# function for rendering the buttons
 def button(screen, position, text):
     font = pygame.font.SysFont("Corbel", 20)
     text_render = font.render(text, 0, (0, 0, 0))
@@ -161,6 +166,14 @@ def button(screen, position, text):
     return screen.blit(text_render, (x, y))
 
 
+# function for rendering the header on game screen
+def render_header(text, color, x_coordinate, y_coordinate):
+    font = pygame.font.SysFont("Corbel", 45)
+    text_render = font.render(text, True, color, (0, 0, 0))
+    window.blit(text_render, (x_coordinate, y_coordinate))
+
+
+# function for adding blank grid spaces to array
 def is_empty(array):
     cols = []
     rows = []
@@ -172,10 +185,10 @@ def is_empty(array):
     return rows, cols
 
 
+# function defining weights for AI
 def weights(count, no_piece, piece):
     points = 0
     count_enemy_piece = 5 - count - no_piece
-    # print("human: " + str(count_enemy_piece) + "ai: " + str(count) + "none: " + str(no_piece))
 
     # offense
     if count == 5:  # five in a row - win
@@ -200,6 +213,7 @@ def weights(count, no_piece, piece):
     return points
 
 
+# function for adding up weights
 def add_weights(array, piece):
     points = 0
 
@@ -208,8 +222,7 @@ def add_weights(array, piece):
     for row in range(15):
         for col in range(15):
             if array[row][col] == piece:
-                count += (14 - abs(7 - row) - abs(7 - col))/7
-                # print("count: " + str(count))
+                count += (14 - abs(7 - row) - abs(7 - col)) / 7
     points += count
 
     for row in range(15):
@@ -219,33 +232,29 @@ def add_weights(array, piece):
             if col < 11:
                 count = count_horizontal(array, row, col, piece)[0]
                 no_piece = count_horizontal(array, row, col, piece)[1]
-                print("horizontal: " + str(count) + " " + str(no_piece) + " " + str(points))
                 points += weights(count, no_piece, 2)
 
             # check vertical 5 in a row
             if row < 11:
                 count = count_vertical(array, row, col, piece)[0]
                 no_piece = count_vertical(array, row, col, piece)[1]
-                print("vertical: " + str(count) + " " + str(no_piece) + " " + str(points))
                 points += weights(count, no_piece, 2)
 
             # check diagonal pos slope 5 in a row
             if row > 3 and col < 11:
                 count = count_slope_pos(array, row, col, piece)[0]
                 no_piece = count_slope_pos(array, row, col, piece)[1]
-                print("pos slope: " + str(count) + " " + str(no_piece) + " " + str(points))
-                points += weights(count, no_piece,2)
+                points += weights(count, no_piece, 2)
 
             # check diagonal neg slope 5 in a row
             if row < 11 and col < 11:
                 count = count_slope_neg(array, row, col, piece)[0]
                 no_piece = count_slope_neg(array, row, col, piece)[1]
                 points += weights(count, no_piece, 2)
-                print("neg slope: " + str(count) + " " + str(no_piece) + " " + str(points))
-            print("points at (" + str(row) + ", " + str(col) + ") : " + str(points))
     return points
 
 
+# Minimax algorithm for AI
 def algorithm(array, depth, alpha, beta, max_player):
     # return random.randint(0, 14), random.randint(0, 14), 4
     # get valid locations
@@ -269,13 +278,10 @@ def algorithm(array, depth, alpha, beta, max_player):
             arr_copy = array.copy()
             arr_copy[rows[i]][cols[i]] = 2
             new_value = algorithm(arr_copy, depth - 1, alpha, beta, False)[2]
-            # print("new_value maxplayer: " + str(new_value))
             if new_value > value:
                 value = new_value
                 row = rows[i]
                 column = cols[i]
-                print("Greater value at " + str(row) + " " + str(column) + "val: " + str(new_value))
-                # print("row and column" + str(row) + " " + str(column))
             alpha = max(alpha, value)
             if alpha >= beta:
                 break
@@ -289,12 +295,10 @@ def algorithm(array, depth, alpha, beta, max_player):
             arr_copy = array.copy()
             arr_copy[rows[i]][cols[i]] = 1
             new_value = algorithm(arr_copy, depth - 1, alpha, beta, True)[2]
-            # print("new_value minplayer: " + str(new_value))
             if new_value < value:
                 value = new_value
                 row = rows[i]
                 column = cols[i]
-                # print("row and column" + str(row) + " " + str(column))
             beta = min(beta, value)
             if alpha >= beta:
                 break
@@ -314,7 +318,6 @@ def human_vs_human():
 
     # Create grids (Array and GUI)
     grid_arr = np.zeros((15, 15))
-    print(grid_arr)
     for i in range(BOARD_HEIGHT):
         for j in range(BOARD_WIDTH):
             pygame.draw.rect(window, WHITE,
@@ -325,12 +328,10 @@ def human_vs_human():
             begin = 0
             if event.type == pygame.QUIT:
                 sys.exit()
-            font = pygame.font.SysFont("Corbel", 45)
             if event.type == pygame.MOUSEBUTTONDOWN and is_winner == 0:
                 begin = 1
                 x_coordinate = event.pos[0]
                 y_coordinate = event.pos[1]
-                print("CLICKED at (" + str(x_coordinate) + ", " + str(y_coordinate) + ") in grid")
 
                 # Check if valid coordinate (if near the grid)
                 valid_position = True
@@ -353,45 +354,37 @@ def human_vs_human():
                 if x_abs_diff > .3 or y_abs_diff > .3:
                     valid_position = False
 
-                print("CLICKED at (" + str(row) + ", " + str(col) + ") in array")
-
                 # If array is empty, fill the array and display piece and move to next turn
                 if valid_position and grid_arr[row][col] == 0:
                     grid_arr[row][col] = turn + 1
-                    print(grid_arr)
 
                     # display piece
 
                     if turn == 0:
-                        text_render = font.render("Player 2's Turn", True, MAROON, (0, 0, 0))
-                        window.blit(text_render, (212, 10))
+                        render_header("Player 2's Turn", MAROON, 212, 10)
+                        # Displaying player 1's piece
                         img = pygame.image.load("White-piece.png")
                         img = pygame.transform.rotozoom(img, 0, 0.15)
                         img.convert()
                         rect = img.get_rect()
                         rect.center = col * 25 + START_WIDTH, row * 25 + START_HEIGHT
                         window.blit(img, rect)
-                        # pygame.draw.circle(window, WHITE, (col * 25 + START_WIDTH, row * 25 + START_HEIGHT), 7)
                     else:
-                        text_render = font.render("Player 1's Turn ", True, WHITE, (0, 0, 0))
-                        window.blit(text_render, (212, 10))
+                        render_header("Player 1's Turn", WHITE, 212, 10)
+                        # Displaying player 2's piece
                         img = pygame.image.load("Maroon-piece.png")
                         img = pygame.transform.rotozoom(img, 0, 0.17)
                         img.convert()
                         rect = img.get_rect()
                         rect.center = col * 25 + START_WIDTH, row * 25 + START_HEIGHT
                         window.blit(img, rect)
-                        # pygame.draw.circle(window, RED, (col * 25 + START_WIDTH, row * 25 + START_HEIGHT), 7)
 
                     # check if win
                     if is_win(grid_arr, turn + 1):
-                        print("WINNER is " + str(turn))
                         is_winner = 1
                         # Displaying the winner
                         player_turn = turn + 1
-                        font = pygame.font.SysFont("Corbel", 45, True, True)
-                        text_render = font.render("Player " + str(player_turn) + " Wins!   ", True, WHITE, (0, 0, 0))
-                        window.blit(text_render, (208, 10))
+                        render_header("Player " + str(player_turn) + " Wins!   ", WHITE, 212, 10)
                         break
                     # next turn
                     turn += 1
@@ -402,8 +395,8 @@ def human_vs_human():
             b2 = button(window, (350, 430), "Restart")
             # Respond based on which button user has clicked
             if turn == 0 and begin == 0 and is_winner == 0:
-                text_render = font.render("Player 1's Turn ", True, WHITE, (0, 0, 0))
-                window.blit(text_render, (212, 10))
+                render_header("Player 1's Turn", WHITE, 212, 10)
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if b1.collidepoint(pygame.mouse.get_pos()):
                     game_over = True
@@ -412,6 +405,7 @@ def human_vs_human():
         pygame.display.update()
 
 
+# Human vs. AI implementation
 def human_vs_ai():
     # set screen
     black = (0, 0, 0)
@@ -424,7 +418,6 @@ def human_vs_ai():
 
     # Create grids (Array and GUI)
     grid_arr = np.zeros((15, 15))
-    print(grid_arr)
     for i in range(BOARD_HEIGHT):
         for j in range(BOARD_WIDTH):
             pygame.draw.rect(window, WHITE,
@@ -435,12 +428,10 @@ def human_vs_ai():
             begin = 0
             if event.type == pygame.QUIT:
                 sys.exit()
-            font = pygame.font.SysFont("Corbel", 45)
             if event.type == pygame.MOUSEBUTTONDOWN and is_winner == 0 and turn == 0:
                 begin = 1
                 x_coordinate = event.pos[0]
                 y_coordinate = event.pos[1]
-                print("CLICKED at (" + str(x_coordinate) + ", " + str(y_coordinate) + ") in grid")
 
                 # Check if valid coordinate (if near the grid)
                 valid_position = True
@@ -463,17 +454,13 @@ def human_vs_ai():
                 if x_abs_diff > .3 or y_abs_diff > .3:
                     valid_position = False
 
-                print("CLICKED at (" + str(row) + ", " + str(col) + ") in array")
-
                 # If array is empty, fill the array and display piece and move to next turn
                 if valid_position and grid_arr[row][col] == 0:
                     grid_arr[row][col] = turn + 1
-                    print(grid_arr)
 
                     # display piece
                     if turn == 0:
-                        text_render = font.render("Player 1's Turn ", True, WHITE, (0, 0, 0))
-                        window.blit(text_render, (212, 10))
+                        render_header("Player 1's Turn", WHITE, 212, 10)
                         img = pygame.image.load("White-piece.png")
                         img = pygame.transform.rotozoom(img, 0, 0.15)
                         img.convert()
@@ -483,56 +470,46 @@ def human_vs_ai():
 
                     # check if win
                     if is_win(grid_arr, turn + 1):
-                        print("WINNER is " + str(turn))
                         is_winner = 1
                         if turn == 0:
-                            text_render = font.render("Player 1 Wins!   ", True, WHITE, (0, 0, 0))
-                            window.blit(text_render, (208, 10))
+                            render_header("Player 1 Wins!   ", WHITE, 208, 10)
                         else:
-                            text_render = font.render("   AI Wins!   ", True, WHITE, (0, 0, 0))
-                            window.blit(text_render, (208, 10))
+                            render_header("   AI Wins!   ", WHITE, 208, 10)
 
                     # change turns
                     if is_winner == 0:
                         turn += 1
                         turn = turn % 2
-                        text_render = font.render("     AI's Turn      ", True, MAROON, (0, 0, 0))
-                        window.blit(text_render, (212, 12))
+                        render_header("     AI's Turn      ", MAROON, 212, 12)
                     pygame.display.update()
 
             # Setting buttons for returning and restarting
             b1 = button(window, (245, 430), "Home")
             b2 = button(window, (350, 430), "Restart")
             # Respond based on which button user has clicked
+
             if turn == 0 and begin == 0 and is_winner == 0:
-                text_render = font.render("Player 1's Turn ", True, WHITE, (0, 0, 0))
-                window.blit(text_render, (212, 10))
+                render_header("Player 1's Turn ", WHITE, 212, 10)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if b1.collidepoint(pygame.mouse.get_pos()):
                     game_over = True
                 elif b2.collidepoint(pygame.mouse.get_pos()):
                     human_vs_ai()
 
+        # Running the AI algorithm 
         if turn == 1 and is_winner == 0:
-            # sleep(1)
             row, col, algorithm_score = algorithm(grid_arr, 1, -math.inf, math.inf, True)
-            print("score: " + str(algorithm_score))
             # Change array
             grid_arr[row][col] = turn + 1
-            # print(grid_arr)
 
             if is_win(grid_arr, turn + 1):
-                print("WINNER is " + str(turn))
                 is_winner = 1
                 if turn == 0:
-                    text_render = font.render("Player 1 Wins!   ", True, WHITE, (0, 0, 0))
-                    window.blit(text_render, (208, 10))
+                    render_header("Player 1 Wins!   ", WHITE, 208, 10)
                 else:
-                    text_render = font.render("   AI Wins!   ", True, WHITE, (0, 0, 0))
-                    window.blit(text_render, (208, 10))
+                    render_header("   AI Wins!   ", WHITE, 208, 10)
 
-            # Display piece
-            print("AI turn")
+            # Display piece for the AI
             img = pygame.image.load("Maroon-piece.png")
             img = pygame.transform.rotozoom(img, 0, 0.17)
             img.convert()
