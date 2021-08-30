@@ -1,7 +1,7 @@
 # Gomoku 
 ## Details:
 Python game based on gomoku (5 in a row) with human vs. human and human vs. AI options.  
-Minimax algorithm used for AI.
+Minimax algorithm used for AI, and pygame used for the GUI.
 
 ## Preview:
 ### Gameplay Against AI
