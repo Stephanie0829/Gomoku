@@ -1,9 +1,13 @@
 # Gomoku 
-### Details:
+## Details:
 Python game based on gomoku (5 in a row) with human vs. human and human vs. AI options.  
 Minimax algorithm used for AI.
 
-### Preview:
+## Preview:
+### Gameplay Against AI
+https://user-images.githubusercontent.com/72533858/131419404-8919ec20-30c2-41e5-9be4-e1017d389e05.mov
+
+### Layout
 **Home Screen**\
 User selection of different gaming modes, and option to quit.\
 <img width="350" alt="Screen Shot 2021-08-30 at 6 52 36 PM" src="https://user-images.githubusercontent.com/72533858/131417628-4ae34f00-4cb9-47d6-ba99-770866c73d7e.png">
@@ -25,13 +29,13 @@ Option to clear the board and restart.\
 
 
 
-### Installation instructions:
+## Installation instructions:
 1. Download zip file or clone repository
 2. Open code in IDE of your choosing
 3. Install libraries (pygame, math, numpy, pygame-menu, button)
 4. Run code
 
-### Other details
+## Other details
 - Pieces and home screen image created using figma (c)
 - Used a connect four tutorial as inspiriation during the learning/brainstorming process. Linked: https://www.youtube.com/watch?v=8392NJjj8s0&ab_channel=freeCodeCamp.org
 - Future thoughts/improvements:
