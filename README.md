@@ -5,7 +5,8 @@ Minimax algorithm used for AI, and pygame used for the GUI.
 
 ## Preview:
 ### Gameplay Against AI
-https://user-images.githubusercontent.com/72533858/131419962-fb23fdc5-3a4f-45d3-bf62-3b142d6bd8cf.mov
+
+https://user-images.githubusercontent.com/72533858/131420161-9bda2713-60e1-4427-907f-1e22ca1814cf.mov
 
 ### Layout
 **Home Screen**\
