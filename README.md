@@ -34,7 +34,7 @@ Option to clear the board and restart.\
 ### Other details
 - Pieces and home screen image created using figma (c)
 - Used a connect four tutorial as inspiriation during the learning/brainstorming process. Linked: https://www.youtube.com/watch?v=8392NJjj8s0&ab_channel=freeCodeCamp.org
-- Future thoughts/improvements:mini
+- Future thoughts/improvements:
   - Use neural networks (reinforcement learning) to improve the speed and accuracy of algorithm (minimax is limited by computer power)
   - Add a database for keeping the highest user score and other data
   - Create an easier access such as making it web based or deployed on a hosting site
